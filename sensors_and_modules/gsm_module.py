@@ -11,6 +11,9 @@ def send_at_command(command, wait_time=2000):
     response = uart.read()
     return response
 
+def send_sms():
+    pass
+
 # Function to make a call
 def make_call(phone_number):
     send_at_command("ATD{};".format(phone_number))  # ; indicates voice call
