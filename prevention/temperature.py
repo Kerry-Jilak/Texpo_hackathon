@@ -1,5 +1,3 @@
-import utime
-import _thread
 from sensors_and_modules import gps_module
 from sensors_and_modules import gsm_module
 
@@ -48,13 +46,37 @@ class Temperature:
             this.temperature_readings.pop(0)
             this.temperature_readings.append(temperature)
             this.relative_humidity_readings.append(relative_humidity)
+    
+    def get_reading_averages(this):
+        a = 0
+        b = 0
+        c = 0
+        d = 0
+        for x in this.temperature_readings:
+            a += 1
+            b += x
+        temp_average = b/a
+        
+        for z in this.relative_humidity_readings:
+            c += 1
+            d += z
+        rh_average = d/c
+            
+        return temp_average, rh_average
 
     def risk_detector(this):
         """
-        This method waits for three minutes and checks if there is current 
-        temperature is above normal levels
+        This method check if there temperature is to high. It triggers an alert when
+        temperatures are too high
         """
-        if this.temperature_readings[len(this.temperature_readings)-2]>this.temperature_threshold and this.temperature_readings[len(this.temperature_readings)-1]>this.temperature_threshold:
-            return gsm_module.make_call()
-        else:
-            return 
+        
+        temp_average, rh_average = this.get_reading_averages()
+        
+        for x in range(7):
+            if temp_average in range(this.temperature_ranges[x][0],this.temperature_ranges[x][1]) and rh_average in range(this.relative_humidity_ranges[x][0],this.relative_humidity_ranges[x][1]):
+                continue
+            else:
+                gsm_module.make_call()
+                # Get gps data for sms
+                # Sound Alarm
+                return gsm_module.send_sms()
