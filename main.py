@@ -2,7 +2,7 @@ import utime
 import _thread
 from prevention import temperature
 from prevention import gas
-from sensors_and_modules import temperature_humidity_sensor
+from sensors_and_modules import temperature_humidity_sensor,pir_sensor
 import machine
 
 button = machine.Pin(15,machine.Pin.OUT)
@@ -35,10 +35,15 @@ def suffocation_prevention():
 
 # Checking for human presence
 def Check_for_human_presence():
+    # Motion
+    motion_sensor = pir_sensor.pir_sensor
+    motion_sensor.irq(trigger=machine.Pin.IRG_RISING,handler=suffocation_prevention)
+    motion_sensor.irq(trigger=machine.Pin.IRG_RISING,handler=start_temp_rh_thread)
+    
+    # Gas
+    
     pass
-    if human_present:
-       suffocation_prevention()
-       start_temp_rh_thread()
+    # Check Gas concentration
        
 
 

@@ -34,10 +34,7 @@ class Temperature:
     def add_readings(this,temperature,relative_humidity):
         """
         Add a temperature reading from the temperature sensor to list of 
-        temperature readings.  This method triggers a process in a seperate 
-        thread for confirming that the temperature present in the car can cause
-        heatstroke. The thread confirms if temperature is still above threshold
-        after 3 mins
+        temperature readings.
         """
         if len(this.temperature_readings) < this.size:
             this.temperature_readings.append(temperature)
